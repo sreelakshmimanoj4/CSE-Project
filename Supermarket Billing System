@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <string.h>
+
+// Structure to hold product information
+typedef struct {
+    char product_name[100];
+    float product_price;
+    int product_quantity;
+} Product;
+
+// Structure to hold customer information
+typedef struct {
+    char customer_name[100];
+    float bill_amount;
+} Customer;
+
+// Function to display available products
+void show_Products(Product products[], int num_prod) {
+    printf("PRODUCTS AVAILABLE:\n");
+    printf("-----------------------------------------------------\n");
+    printf("Product Name\t\tProduct Price\tQuantity\n");
+    printf("-----------------------------------------------------\n");
+
+    for (int i = 0; i < num_prod; i++) {
+        printf("%s\t\t\t\t%.2f\t\t\t%d\n", products[i].product_name, products[i].product_price, products[i].product_quantity);
+    }
+
+    printf("-----------------------------------------------------\n");
+}
+
+// Function to calculate the total bill amount
+float calculate_Bill(Product products[], int num_prod, int _quantity[]) {
+    float total_amount = 0.0;
+
+    for (int i = 0; i < num_prod; i++) {
+        total_amount += products[i].product_price * _quantity[i];
+    }
+
+    return total_amount;
+}
+
+int main() {
+    // Available products in the store
+    Product products[5];
+    products[0] = (Product){"Product 1", 10.0, 20};
+    products[1] = (Product){"Product 2", 15.0, 15};
+    products[2] = (Product){"Product 3", 20.0, 10};
+    products[3] = (Product){"Product 4", 25.0, 5};
+    products[4] = (Product){"Product 5", 30.0, 3};
+
+    int num_prod = 5;
+
+    // Array to store the quantities of each product
+    int _quantity[5];
+
+    // Array to store customer details
+    Customer customers[100];
+    
+    int num_customer = 0;
+    int choice;
+    char x='y';
+    
+    while( x=='y') {
+        printf("\n1. Show Products\n");
+        printf("2. Billing\n");
+        printf("3. Customer Details\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                show_Products(products, num_prod);
+                break;
+            case 2: {
+                // Get customer name
+                char customer_name[100];
+                printf("Enter customer name: ");
+                scanf("%s", customer_name);
+
+                // Get product quantities
+                for (int i = 0; i < num_prod; i++) {
+                    printf("Enter quantity for %s: ", products[i].product_name);
+                    scanf("%d", &_quantity[i]);
+                }
+
+                // Calculate and display the bill amount
+                float bill_totalAmount = calculate_Bill(products, num_prod,_quantity);
+                printf("\nCustomer: %s\n", customer_name);
+                printf("Bill Amount: %.2f\n", bill_totalAmount);
+
+                // Store customer details
+                strcpy(customers[num_customer].customer_name, customer_name);
+                customers[num_customer].bill_amount = bill_totalAmount;
+                num_customer++;
+                break;
+            }
+            case 3:
+                printf("\nCustomer Details:\n");
+                printf("--------------------------------\n");
+                printf("Customer Name\t\tBill Amount\n");
+                printf("--------------------------------\n");
+                for (int i = 0; i < num_customer; i++) {
+                    printf("%s\t\t\t\t%.2f\n", customers[i].customer_name, customers[i].bill_amount);
+                }
+            printf("Enter 'y' to continue: ");
+            scanf("%c",&x);
+    
+        }}
+        
+        return 0;
+}
